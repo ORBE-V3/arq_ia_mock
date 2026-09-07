@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ChevronsUpDown,
   ArrowUpRight,
+  LogOut,
   Sun,
   Moon,
 } from 'lucide-react';
@@ -110,6 +111,14 @@ function Shell({ children }: { children: React.ReactNode }) {
               <HelpCircle size={18} />
               <span>Ajuda e suporte</span>
             </Link>
+            <Link
+              className="nav-item logout-link"
+              href="/"
+              aria-label="Sair da conta e voltar para a página inicial"
+            >
+              <LogOut size={18} />
+              <span>Sair da conta</span>
+            </Link>
           </nav>
           <div className="plan-card">
             <span>
@@ -123,14 +132,18 @@ function Shell({ children }: { children: React.ReactNode }) {
             </div>
             <small>3 unidades · 42 licenças ativas</small>
           </div>
-          <div className="profile">
+          <Link
+            className="profile"
+            href="/settings"
+            aria-label="Abrir perfil e configurações"
+          >
             <span className="avatar">AM</span>
             <div>
               <strong>Ana Martins</strong>
               <small>Administradora da organização</small>
             </div>
             <span className="online-dot" />
-          </div>
+          </Link>
         </div>
       </Sidebar>
       <main className="main">
@@ -163,7 +176,22 @@ function Shell({ children }: { children: React.ReactNode }) {
               <Bell size={19} />
               {!read && <i />}
             </button>
-            <span className="avatar small">AM</span>
+            <Link
+              className="icon-btn top-logout"
+              href="/"
+              aria-label="Sair da conta"
+              title="Sair da conta"
+            >
+              <LogOut size={18} />
+            </Link>
+            <Link
+              className="avatar small top-avatar"
+              href="/settings"
+              aria-label="Abrir perfil e configurações"
+              title="Perfil e configurações"
+            >
+              AM
+            </Link>
           </div>
         </header>
         <div className="content">{children}</div>
