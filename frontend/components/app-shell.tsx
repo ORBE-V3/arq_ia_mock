@@ -1,12 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   FolderOpen,
   ScanLine,
   Ruler,
+  Calculator,
   Files,
   ChartNoAxesCombined,
   Settings,
@@ -18,6 +19,7 @@ import {
   LogOut,
   Sun,
   Moon,
+  Presentation,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -32,11 +34,13 @@ import {
 } from '@/components/ui/sheet';
 import { DemoProvider, useDemo } from '@/hooks/use-demo';
 import { AIChat } from '@/components/ai-chat';
+import { MotionEnhancer, PageTransition, PremiumScene } from '@/components/premium-motion';
 const nav = [
   ['Dashboard', '/dashboard', LayoutDashboard],
   ['Projetos', '/projects', FolderOpen],
   ['ArqCheck AI', '/arqcheck', ScanLine],
   ['ArqQuant AI', '/arqquant', Ruler],
+  ['ArqBudget AI', '/arqbudget', Calculator],
   ['ArqDocs AI', '/arqdocs', Files],
   ['ArqRadar', '/arqradar', ChartNoAxesCombined],
 ] as const;
@@ -44,7 +48,10 @@ function Shell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const [notifications, setNotifications] = useState(false);
   const [read, setRead] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { notice } = useDemo();
+  useEffect(() => { const saved = localStorage.getItem('arq-sidebar-open'); if (saved !== null) setSidebarOpen(saved !== 'false'); }, []);
+  function setSidebar(value: boolean) { setSidebarOpen(value); localStorage.setItem('arq-sidebar-open', String(value)); }
   function toggleTheme() {
     const next =
       document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -60,13 +67,18 @@ function Shell({ children }: { children: React.ReactNode }) {
         ? 'Ajuda'
         : 'Dashboard');
   return (
-    <SidebarProvider
+    <SidebarProvider open={sidebarOpen} onOpenChange={setSidebar}
       style={{ '--sidebar-width': '248px' } as React.CSSProperties}
     >
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <Link href="/dashboard" className="brand">
           <span className="brand-mark">
-            <i />A
+            <svg className="brand-glyph" viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M16 3.5 28 10v12L16 28.5 4 22V10L16 3.5Z" fill="none" stroke="currentColor" strokeWidth="1.25" opacity=".42" />
+              <path d="M16 3.5v12.3L28 10M16 15.8 4 10" fill="none" stroke="currentColor" strokeWidth="1.25" opacity=".7" />
+              <path d="m10.2 22 5.8-13.5L21.8 22M12.3 17.2h7.4" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="24.9" cy="6.5" r="1.7" fill="var(--accent)" />
+            </svg>
           </span>
           <span>
             ARQ<span className="brand-ai">.AI</span>
@@ -155,6 +167,10 @@ function Shell({ children }: { children: React.ReactNode }) {
             <b>{current}</b>
           </div>
           <div className="top-actions">
+            <Link className="presentation-link" href="/apresentacao" title="Abrir modo apresentação">
+              <Presentation size={15} />
+              <span>Apresentar</span>
+            </Link>
             <span className="demo-pill">
               <i />
               Enterprise Demo
@@ -194,7 +210,11 @@ function Shell({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
         </header>
-        <div className="content">{children}</div>
+        <div className="content-wrap">
+          <PremiumScene />
+          <MotionEnhancer />
+          <div className="content"><PageTransition>{children}</PageTransition></div>
+        </div>
         <footer className="footer">
           <b>ARQ.AI</b>
           <span>Mais tempo para criar. Mais clareza para decidir.</span>

@@ -39,7 +39,12 @@ export default function LoginPage() {
         <div className="login-grid-lines" />
         <a href="/" className="login-brand">
           <span className="brand-mark">
-            <i />A
+            <svg className="brand-glyph" viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M16 3.5 28 10v12L16 28.5 4 22V10L16 3.5Z" fill="none" stroke="currentColor" strokeWidth="1.25" opacity=".42" />
+              <path d="M16 3.5v12.3L28 10M16 15.8 4 10" fill="none" stroke="currentColor" strokeWidth="1.25" opacity=".7" />
+              <path d="m10.2 22 5.8-13.5L21.8 22M12.3 17.2h7.4" fill="none" stroke="currentColor" strokeWidth="2.05" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="24.9" cy="6.5" r="1.7" fill="var(--accent)" />
+            </svg>
           </span>
           <span>
             ARQ<span>.AI</span>

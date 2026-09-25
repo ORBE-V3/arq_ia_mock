@@ -1,5 +1,14 @@
 export type Project={id:string;name:string;client:string;type:string;owner:string;stage:string;status:string;deadline:string;progress:number;risk:string;area:number;revenue:number;cost:number;hours:number;createdAt:string};
-export type DocumentRecord={id:string;name:string;category:string;projectId:string;date:string;status:string;confidence:number;area:number;url?:string};
+export type DocumentRecord={id:string;name:string;category:string;projectId:string;date:string;status:string;confidence:number;area:number;url?:string;subtype?:string;size?:number;mimeType?:string;localFile?:boolean};
 export type Issue={id:string;title:string;priority:string;detail:string;resolved:boolean;comments:string[]};
 export type Analysis={id:string;projectId:string;date:string;score:number;documents:number;issues:Issue[]};
 export type Quant={id:string;projectId:string;date:string;area:number};
+export type BudgetLine={id:string;name:string;category?:string;unit:string;quantity:number;unitCost:number;source:string;notes?:string;reviewStatus?:string};
+export type Budget={id:string;projectId:string;date:string;scenario:string;total:number;status:string;lines:BudgetLine[]};
+export type ProjectAsset={id:string;projectId:string;kind:'BIN'|'2D'|'3D';name:string;date:string;status:string};
+export type AgentFeedback={id:string;runId:string;projectId:string;agentName:string;rating:'Útil'|'Parcial'|'Não útil';comment:string;date:string;user:string};
+export type AgentExecution={id:string;projectId:string;documentIds:string[];agentName:string;date:string;user:string;status:'Processando'|'Concluído'|'Erro';result:string;error?:string;feedback?:'Útil'|'Parcial'|'Não útil';feedbackComment?:string;outputFormat?:string;templateId?:string;instruction?:string;sourceNames?:string[]};
+export type ProjectPending={id:string;projectId:string;title:string;type:string;detail:string;assignee:string;priority:'Baixa'|'Média'|'Alta'|'Crítica';dueDate:string;status:'Aberta'|'Em andamento'|'Aguardando cliente'|'Concluída'|'Com erro';source:'Equipe'|'IA'|'Integração';documentIds?:string[];agentRunId?:string};
+export type KanbanCard={id:string;projectId:string;title:string;column:'Novo'|'Aguardando documento'|'Aguardando resposta'|'Em análise'|'Processando pela IA'|'Em revisão humana'|'Concluído'|'Com erro'|'Cancelado';type:string;assignee:string;priority:'Baixa'|'Média'|'Alta'|'Crítica';dueDate:string;detail:string;pendingId?:string;documentIds?:string[];comments?:string[];attachments?:string[]};
+export type RadarAccess={general:boolean;regional:boolean;project:boolean;financial:boolean;operational:boolean;productivity:boolean;sensitive:boolean;region:string};
+export type ProjectTemplate={id:string;projectId:string;name:string;kind:'Empresa'|'Projeto'|'Cliente'|'Personalizado';format:'Relatório'|'Parecer'|'Proposta'|'Apresentação';status:'Ativo'|'Rascunho';updatedAt:string;default?:boolean};

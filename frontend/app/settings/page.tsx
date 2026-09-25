@@ -1,11 +1,15 @@
 'use client';
 import { useState } from 'react';
 import {
+  BarChart3,
   Building2,
+  ChartNoAxesCombined,
   CheckCircle2,
+  ClipboardCheck,
   CloudCog,
   Database,
   FileClock,
+  FolderOpen,
   Globe2,
   KeyRound,
   MapPin,
@@ -60,7 +64,7 @@ const roles = [
 ];
 
 export default function Page() {
-  const { notice } = useDemo();
+  const { notice, radarAccess, update } = useDemo();
   const [name, setName] = useState('Ana Martins');
   const [email, setEmail] = useState('ana.martins@studioarquitetura.com.br');
   const [workspace, setWorkspace] = useState('Studio Arquitetura');
@@ -74,6 +78,10 @@ export default function Page() {
   function save(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     notice('Configurações Enterprise salvas.');
+  }
+  function setRadarAccess(field: keyof typeof radarAccess, value: boolean) {
+    update((state) => ({ ...state, radarAccess: { ...state.radarAccess, [field]: value } }));
+    notice('Permissão do ArqRadar atualizada.');
   }
   return (
     <>
@@ -293,6 +301,20 @@ export default function Page() {
                 </button>
               </div>
             ))}
+          </div>
+        </ChartCard>
+        <ChartCard
+          title="ArqRadar: escopo de dashboards"
+          subtitle="Defina o que cada perfil administrativo pode acessar dentro da organização"
+        >
+          <div className="radar-admin-grid">
+            <SettingToggle icon={ChartNoAxesCombined} title="Dashboard geral" detail="Portfólio completo e visão financeira" checked={radarAccess.general} onChange={(value) => setRadarAccess('general', value)} />
+            <SettingToggle icon={MapPin} title="Dashboard regional" detail="Indicadores por unidade e regional" checked={radarAccess.regional} onChange={(value) => setRadarAccess('regional', value)} />
+            <SettingToggle icon={FolderOpen} title="Dashboard por projeto" detail="Radar contextual dentro do projeto" checked={radarAccess.project} onChange={(value) => setRadarAccess('project', value)} />
+            <SettingToggle icon={BarChart3} title="Dados financeiros" detail="Receita, custo, margem e orçamento" checked={radarAccess.financial} onChange={(value) => setRadarAccess('financial', value)} />
+            <SettingToggle icon={ClipboardCheck} title="Dados operacionais" detail="Pendências, documentos e andamento" checked={radarAccess.operational} onChange={(value) => setRadarAccess('operational', value)} />
+            <SettingToggle icon={Users} title="Produtividade" detail="Horas, agentes e capacidade do time" checked={radarAccess.productivity} onChange={(value) => setRadarAccess('productivity', value)} />
+            <SettingToggle icon={ShieldCheck} title="Dados sensíveis" detail="Clientes, contratos e informações restritas" checked={radarAccess.sensitive} onChange={(value) => setRadarAccess('sensitive', value)} />
           </div>
         </ChartCard>
         <div className="settings-spacer" />

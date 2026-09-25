@@ -11,3 +11,5 @@
 **/*.log
 **/*.tsbuildinfo
 *.zip
+/Fotos/
+/PROMPT_RUNWAY_ARQ_AI.md

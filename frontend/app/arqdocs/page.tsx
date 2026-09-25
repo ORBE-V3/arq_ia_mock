@@ -8,6 +8,8 @@ import {
   Building2,
   CheckCircle2,
   ChevronRight,
+  Download,
+  FileArchive,
   FileCheck2,
   FileSearch,
   FolderArchive,
@@ -17,15 +19,13 @@ import {
   Send,
   ShieldCheck,
   Sparkles,
+  ThumbsDown,
+  ThumbsUp,
+  UploadCloud,
   Users,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-} from '@/components/ui/sheet';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   PageHeader,
   Picker,
@@ -135,7 +135,7 @@ const results: Record<
 };
 
 function ArqDocsView() {
-  const { projects, documents, notice } = useDemo();
+  const { projects, documents, notice, update, templates, agentFeedback } = useDemo();
   const params = useSearchParams();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('Todas');
@@ -149,6 +149,16 @@ function ArqDocsView() {
   const [runOpen, setRunOpen] = useState(false);
   const [activeAgent, setActiveAgent] = useState<Agent>(seededAgents[0]);
   const [running, setRunning] = useState(false);
+  const [runProjectName, setRunProjectName] = useState(projectName === 'Todos' ? projects[0]?.name || 'Todos' : projectName);
+  const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
+  const [externalFiles, setExternalFiles] = useState<File[]>([]);
+  const [saveExternal, setSaveExternal] = useState(true);
+  const [outputFormat, setOutputFormat] = useState('Parecer técnico');
+  const [runInstruction, setRunInstruction] = useState('');
+  const [templateId, setTemplateId] = useState('none');
+  const [activeRunId, setActiveRunId] = useState<string | null>(null);
+  const [feedbackRating, setFeedbackRating] = useState<'Útil' | 'Parcial' | 'Não útil' | null>(null);
+  const [feedbackComment, setFeedbackComment] = useState('');
   const [result, setResult] = useState<(typeof results)[string] | null>(null);
   const [question, setQuestion] = useState('');
   const [docAnswer, setDocAnswer] = useState('');
@@ -164,13 +174,38 @@ function ArqDocsView() {
   );
   const projectOptions = useMemo(() => projects.map((p) => p.name), [projects]);
   const ActiveAgentIcon = activeAgent.icon;
+  const runProject = projects.find((project) => project.name === runProjectName);
+  const runDocuments = documents.filter((doc) => doc.projectId === runProject?.id);
+  const runTemplates = templates.filter((template) => template.projectId === runProject?.id || template.kind === 'Empresa');
+  const usefulFeedback = agentFeedback.filter((item) => item.rating === 'Útil').length;
+  const reviewedFeedback = agentFeedback.length;
   function openAgent(agent: Agent) {
     setActiveAgent(agent);
     setResult(null);
+    setRunProjectName(projectName === 'Todos' ? projects[0]?.name || 'Todos' : projectName);
+    const nextProject = projects.find((project) => project.name === (projectName === 'Todos' ? projects[0]?.name : projectName));
+    setSelectedDocIds(documents.filter((doc) => doc.projectId === nextProject?.id).slice(0, 4).map((doc) => doc.id));
+    setExternalFiles([]);
+    setRunInstruction('');
+    setTemplateId('none');
+    setActiveRunId(null);
+    setFeedbackRating(null);
+    setFeedbackComment('');
     setRunOpen(true);
   }
+  function selectRunProject(value: string) {
+    setRunProjectName(value);
+    const nextProject = projects.find((project) => project.name === value);
+    setSelectedDocIds(documents.filter((doc) => doc.projectId === nextProject?.id).slice(0, 4).map((doc) => doc.id));
+  }
+  function addExternalFiles(files: FileList | null) { if (!files?.length) return; setExternalFiles((current) => [...current, ...Array.from(files)]); }
   async function runAgent() {
+    if (!runProject) return;
     setRunning(true);
+    const runId = `global-agent-${Date.now()}`;
+    const persistedDocs = saveExternal ? externalFiles.map((file, index) => ({ id: `external-${Date.now()}-${index}`, name: file.name, category: 'Documento externo', projectId: runProject.id, date: '2026-09-19', status: 'Processado', confidence: 94, area: runProject.area })) : [];
+    setActiveRunId(runId);
+    update((state) => ({ ...state, documents: persistedDocs.length ? [...persistedDocs, ...state.documents] : state.documents, agentRuns: [{ id: runId, projectId: runProject.id, documentIds: [...selectedDocIds, ...persistedDocs.map((doc) => doc.id)], agentName: activeAgent.name, date: '2026-09-19 16:10', user: 'Ana Martins', status: 'Processando', result: '', outputFormat, templateId }, ...state.agentRuns] }));
     await new Promise((r) => setTimeout(r, 1100));
     setResult(
       results[activeAgent.id] || {
@@ -184,8 +219,19 @@ function ArqDocsView() {
         ],
       },
     );
+    update((state) => ({ ...state, agentRuns: state.agentRuns.map((run) => run.id === runId ? { ...run, status: 'Concluído' as const, result: `${outputFormat} gerado com ${selectedDocIds.length + externalFiles.length} documento${selectedDocIds.length + externalFiles.length === 1 ? '' : 's'}${templateId !== 'none' ? ' e template aplicado' : ''}.` } : run) }));
     setRunning(false);
     notice(`${activeAgent.name} concluiu a análise.`);
+  }
+  function submitFeedback() {
+    if (!activeRunId || !runProject || !feedbackRating) return;
+    update((state) => ({ ...state, agentFeedback: [{ id: `feedback-${Date.now()}`, runId: activeRunId, projectId: runProject.id, agentName: activeAgent.name, rating: feedbackRating, comment: feedbackComment, date: '2026-09-19', user: 'Ana Martins' }, ...state.agentFeedback], agentRuns: state.agentRuns.map((run) => run.id === activeRunId ? { ...run, feedback: feedbackRating, feedbackComment } : run) }));
+    notice('Feedback registrado. Ele será usado para melhorar este Agent.');
+  }
+  function exportResult() {
+    if (!result) return;
+    const content = [result.title, '', result.summary, '', ...result.findings.map((finding, index) => `${index + 1}. ${finding}`), '', `Projeto: ${runProjectName}`, `Formato: ${outputFormat}`, `Documentos: ${selectedDocIds.length + externalFiles.length}`, `Template: ${templateId === 'none' ? 'Sem template' : runTemplates.find((template) => template.id === templateId)?.name || 'Selecionado'}`].join('\n');
+    const url = URL.createObjectURL(new Blob([content], { type: 'text/plain;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = `arqdocs-${activeAgent.id}-resultado.txt`; link.click(); URL.revokeObjectURL(url); notice('Resultado exportado para revisão.');
   }
   function askDocuments(e: React.SyntheticEvent) {
     e.preventDefault();
@@ -359,6 +405,7 @@ function ArqDocsView() {
           <strong>{categories.length}</strong>
         </div>
       </div>
+      <div className="agent-quality-strip"><div><ShieldCheck size={17} /><span><small>Qualidade acompanhada</small><strong>{reviewedFeedback ? `${Math.round(usefulFeedback / reviewedFeedback * 100)}% de avaliações úteis` : 'Ainda sem avaliações'}</strong></span></div><div><small>Feedbacks recebidos</small><strong>{reviewedFeedback}</strong></div><div><small>Como melhorar</small><span>Revise respostas parciais e não úteis antes de publicar um Agent.</span></div></div>
       <div className="library-toolbar">
         <SearchInput
           value={search}
@@ -417,13 +464,15 @@ function ArqDocsView() {
         />
       </div>
 
-      <Sheet open={runOpen} onOpenChange={setRunOpen}>
-        <SheetContent className="drawer agent-run">
-          <SheetTitle>
+      <Dialog open={runOpen} onOpenChange={setRunOpen}>
+        <DialogContent className="project-modal agent-run-modal">
+          <DialogHeader>
+          <DialogTitle>
             <ActiveAgentIcon size={21} />
             {activeAgent.name}
-          </SheetTitle>
-          <SheetDescription>{activeAgent.description}</SheetDescription>
+          </DialogTitle>
+          <DialogDescription>{activeAgent.description}</DialogDescription>
+          </DialogHeader>
           <div className="agent-run-meta">
             <span>
               <ShieldCheck size={14} />
@@ -431,28 +480,16 @@ function ArqDocsView() {
             </span>
             <span>Versão 2.4</span>
           </div>
-          <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
-            <label className="field">
-              Projeto
-              <select defaultValue={projects[0].name}>
-                {projectOptions.map((p) => (
-                  <option key={p}>{p}</option>
-                ))}
-              </select>
-            </label>
-            <label className="field">
-              Escopo documental
-              <select defaultValue="Todos os documentos do projeto">
-                <option>Todos os documentos do projeto</option>
-                <option>Documentos selecionados</option>
-                <option>Última revisão de cada documento</option>
-              </select>
-            </label>
+          <div className="execution-context-grid">
+            <label className="field">Projeto<select value={runProjectName} onChange={(event) => selectRunProject(event.target.value)}>{projectOptions.map((p) => <option key={p}>{p}</option>)}</select></label>
+            <label className="field">Formato da saída<select value={outputFormat} onChange={(event) => setOutputFormat(event.target.value)}><option>Parecer técnico</option><option>Relatório executivo</option><option>Checklist</option><option>Comparativo entre arquivos</option><option>Extração estruturada</option></select></label>
           </div>
+          <div className="execution-documents"><div className="execution-section-head"><div><strong>Documentos de contexto</strong><small>Escolha arquivos já existentes no projeto ou acrescente documentos externos.</small></div><span className="badge neutral">{selectedDocIds.length + externalFiles.length} selecionados</span></div><div className="execution-doc-list">{runDocuments.slice(0, 10).map((doc) => <label key={doc.id}><input type="checkbox" checked={selectedDocIds.includes(doc.id)} onChange={(event) => setSelectedDocIds((current) => event.target.checked ? [...current, doc.id] : current.filter((id) => id !== doc.id))} /><span><FileSearch size={13} />{doc.name}</span><small>{doc.category}</small></label>)}</div><label className="execution-upload"><UploadCloud size={18} /><span><strong>Adicionar documentos externos</strong><small>PDF, Word, Excel, CSV, imagem, apresentação ou texto.</small></span><input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg,.ppt,.pptx,.txt" onChange={(event) => addExternalFiles(event.target.files)} /></label>{externalFiles.length > 0 && <div className="external-file-list">{externalFiles.map((file) => <span key={`${file.name}-${file.size}`}><FileArchive size={12} />{file.name}<button type="button" aria-label={`Remover ${file.name}`} onClick={() => setExternalFiles((current) => current.filter((item) => item !== file))}>×</button></span>)}</div>}<label className="execution-save-toggle"><input type="checkbox" checked={saveExternal} onChange={(event) => setSaveExternal(event.target.checked)} /><span><strong>Salvar documentos externos no projeto</strong><small>Desmarque para usar somente nesta execução.</small></span></label></div>
+          <div className="execution-options-grid"><label className="field">Template / timbrado<select value={templateId} onChange={(event) => setTemplateId(event.target.value)}><option value="none">Sem template</option>{runTemplates.map((template) => <option value={template.id} key={template.id}>{template.name} · {template.kind}</option>)}</select></label><label className="field">Instrução complementar<textarea rows={3} value={runInstruction} onChange={(event) => setRunInstruction(event.target.value)} placeholder="Ex: destaque riscos, cite as páginas e escreva para a equipe técnica..." /></label></div>
           <button
             className="btn primary full-btn"
             onClick={runAgent}
-            disabled={running}
+            disabled={running || (selectedDocIds.length === 0 && externalFiles.length === 0)}
           >
             {running ? (
               <>
@@ -484,15 +521,17 @@ function ArqDocsView() {
               </div>
               <div className="evidence-row">
                 <FileSearch size={15} />
-                <span>8 evidências vinculadas</span>
+                <span>{selectedDocIds.length + externalFiles.length} documentos · evidências vinculadas · confiança estimada 92%</span>
                 <button onClick={() => notice('Resultado salvo no projeto.')}>
                   Salvar no projeto
                 </button>
+                <button onClick={exportResult}><Download size={13} />Exportar</button>
               </div>
+              <div className="result-feedback"><div><strong>Essa resposta ajudou?</strong><small>Seu feedback melhora a precisão do Agent nas próximas execuções.</small></div><div className="feedback-actions"><button type="button" className={feedbackRating === 'Útil' ? 'selected' : ''} onClick={() => setFeedbackRating('Útil')}><ThumbsUp size={14} />Útil</button><button type="button" className={feedbackRating === 'Parcial' ? 'selected' : ''} onClick={() => setFeedbackRating('Parcial')}><MessageSquareText size={14} />Parcial</button><button type="button" className={feedbackRating === 'Não útil' ? 'selected' : ''} onClick={() => setFeedbackRating('Não útil')}><ThumbsDown size={14} />Não útil</button></div>{feedbackRating && <div className="feedback-form"><textarea rows={2} value={feedbackComment} onChange={(event) => setFeedbackComment(event.target.value)} placeholder="O que deveríamos corrigir ou manter?" /><button className="btn primary" type="button" onClick={submitFeedback}>Enviar feedback</button></div>}</div>
             </div>
           )}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
       <CreateAgent
         open={createOpen}
         onOpenChange={setCreateOpen}
@@ -517,54 +556,70 @@ function CreateAgent({
   const [name, setName] = useState('');
   const [purpose, setPurpose] = useState('');
   const [output, setOutput] = useState('Parecer técnico');
+  const [knowledge, setKnowledge] = useState(
+    'Padrões da organização + documentos do projeto',
+  );
+  const generatedName = name.trim() || 'Novo agente documental';
+  const generatedPrompt = purpose.trim()
+    ? `Você é ${generatedName}.\n\nMissão\n${purpose.trim()}\n\nComo responder\nEntregue um ${output.toLowerCase()}, cite as fontes utilizadas e sinalize qualquer informação que precise de validação humana.\n\nBase autorizada\n${knowledge}.`
+    : 'Escreva o que você precisa que o agente faça. O prompt final aparecerá aqui em tempo real.';
   function submit(e: React.SyntheticEvent) {
     e.preventDefault();
-    if (!name.trim() || !purpose.trim()) return;
+    if (!purpose.trim()) return;
     onCreate({
       id: `custom-${Date.now()}`,
-      name,
+      name: name.trim() || 'Novo agente documental',
       description: purpose,
       deliverable: output,
-      scope: 'Documentos autorizados da organização',
+      scope: knowledge,
       used: 'Ainda não executado',
       icon: Sparkles,
     });
     setName('');
     setPurpose('');
+    setKnowledge('Padrões da organização + documentos do projeto');
     onOpenChange(false);
   }
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="drawer">
-        <SheetTitle>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="project-modal agent-create-modal">
+        <DialogHeader>
+        <DialogTitle>
           <Sparkles size={21} />
           Criar agente documental
-        </SheetTitle>
-        <SheetDescription>
-          Defina a especialidade, as fontes e o formato de entrega. Nesta
-          demonstração, a configuração fica como rascunho.
-        </SheetDescription>
+        </DialogTitle>
+        <DialogDescription>
+          Descreva em linguagem natural o que você precisa. O ARQ.AI organiza
+          a instrução e mostra o prompt antes de salvar o rascunho.
+        </DialogDescription>
+        </DialogHeader>
         <form onSubmit={submit}>
           <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
             <label className="field">
-              Nome do agente
+              Nome do agente <span className="field-hint">opcional</span>
               <input
-                required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ex: Agente de Viabilidade Legal"
+                placeholder="Ex: Viabilidade Legal"
               />
             </label>
             <label className="field">
-              Missão do agente
+              O que você quer que ele faça?
               <textarea
                 required
-                rows={4}
+                rows={5}
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
-                placeholder="Descreva o que o agente deve analisar e quais perguntas deve responder."
+                placeholder="Ex: Analise os documentos do projeto, encontre riscos para aprovação e prepare uma recomendação objetiva para a equipe."
               />
             </label>
+            <div className="prompt-preview" aria-live="polite">
+              <div className="prompt-preview-head">
+                <span><Sparkles size={15} /> Prompt gerado</span>
+                <span className="prompt-live"><i /> ao vivo</span>
+              </div>
+              <pre>{generatedPrompt}</pre>
+            </div>
             <label className="field">
               Formato da entrega
               <select
@@ -580,7 +635,7 @@ function CreateAgent({
             </label>
             <label className="field">
               Base de conhecimento
-              <select defaultValue="Padrões da organização + documentos do projeto">
+              <select value={knowledge} onChange={(e) => setKnowledge(e.target.value)}>
                 <option>Padrões da organização + documentos do projeto</option>
                 <option>Somente documentos do projeto</option>
                 <option>Biblioteca técnica corporativa</option>
@@ -597,7 +652,7 @@ function CreateAgent({
               </p>
             </div>
           </div>
-          <div className="sheet-actions">
+          <DialogFooter className="sheet-actions">
             <button
               type="button"
               className="btn"
@@ -608,10 +663,10 @@ function CreateAgent({
             <button type="submit" className="btn primary">
               Criar como rascunho
             </button>
-          </div>
+          </DialogFooter>
         </form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }
 
