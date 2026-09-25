@@ -8,9 +8,9 @@ type Room = { name: string; area: number; x: number; y: number; w: number; h: nu
 
 const palettes = {
   light: {
-    Concreto: { room: 0xadb7b8, floor: 0xdce1df, line: 0x647881 },
-    Madeira: { room: 0xaa8060, floor: 0xd5c8b6, line: 0x73553f },
-    Claro: { room: 0xd7dbd7, floor: 0xe7ebe7, line: 0x87969a },
+    Concreto: { room: 0xc2b7a8, floor: 0xe9e2d7, line: 0x786958 },
+    Madeira: { room: 0xa98768, floor: 0xd9c9b6, line: 0x6f5540 },
+    Claro: { room: 0xe0d9cd, floor: 0xf0ece4, line: 0x988a78 },
   },
   dark: {
     Concreto: { room: 0x9facb0, floor: 0x39464d, line: 0xd2dfe2 },
@@ -55,7 +55,7 @@ export function SpatialPreview({ rooms, material = 'Concreto', onCapture }: { ro
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setClearColor(0x000000, 0);
 
-    const ambient = new THREE.HemisphereLight(theme === 'dark' ? 0xe3edf0 : 0xffffff, theme === 'dark' ? 0x36454d : 0xb9c5c8, theme === 'dark' ? 1.8 : 2.1);
+    const ambient = new THREE.HemisphereLight(theme === 'dark' ? 0xe3edf0 : 0xffffff, theme === 'dark' ? 0x36454d : 0xc9bca9, theme === 'dark' ? 1.8 : 2.1);
     scene.add(ambient);
     const key = new THREE.DirectionalLight(theme === 'dark' ? 0xe7f2f4 : 0xffffff, theme === 'dark' ? 2.5 : 2.8);
     key.position.set(5, 10, 3);
