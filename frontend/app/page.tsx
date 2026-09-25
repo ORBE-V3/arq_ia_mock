@@ -36,7 +36,7 @@ export default function LoginPage() {
   return (
     <main className="login-page">
       <section className="login-story">
-        <div className="login-grid-lines" />
+        <div className="architectural-study" aria-hidden="true"><span className="study-arch"/><span className="study-wall"/><span className="study-floor"/><span className="study-caption">ESTUDO DE ESPAÇO · 01</span></div>
         <a href="/" className="login-brand">
           <span className="brand-mark">
             <svg className="brand-glyph" viewBox="0 0 32 32" aria-hidden="true">
@@ -53,38 +53,38 @@ export default function LoginPage() {
         <div className="story-content">
           <span className="enterprise-kicker">
             <Building2 size={15} />
-            Inteligência operacional para arquitetura
+            Um lugar mais claro para cada projeto
           </span>
           <h1>
-            Seu escritório inteiro.
+            Mais tempo para criar.
             <br />
-            <em>Uma visão mais clara.</em>
+            <em>Mais clareza para construir.</em>
           </h1>
           <p>
-            Projetos, documentos, análises e decisões conectados em uma
-            plataforma preparada para organizações de arquitetura.
+            Reúna o contexto do projeto, encontre divergências antes da entrega
+            e conduza decisões com a equipe inteira na mesma página.
           </p>
           <div className="story-proof">
             <div>
-              <strong>126h</strong>
-              <span>devolvidas à equipe neste mês</span>
+              <strong>01 / Revisar</strong>
+              <span>Encontre inconsistências entre plantas e documentos.</span>
             </div>
             <div>
-              <strong>87%</strong>
-              <span>de conformidade documental</span>
+              <strong>02 / Medir</strong>
+              <span>Transforme leitura de projeto em quantitativos.</span>
             </div>
             <div>
-              <strong>3</strong>
-              <span>unidades operando em conjunto</span>
+              <strong>03 / Decidir</strong>
+              <span>Compartilhe evidências, custos e próximos passos.</span>
             </div>
           </div>
         </div>
         <div className="story-footer">
           <span>
             <ShieldCheck size={16} />
-            Ambiente corporativo protegido
+            Feito para equipes de projeto
           </span>
-          <span>Enterprise Demo · dados fictícios</span>
+          <span>Ambiente demonstrativo · dados fictícios</span>
         </div>
       </section>
       <section className="login-access">
@@ -99,14 +99,14 @@ export default function LoginPage() {
         <div className="login-card">
           <div className="login-card-head">
             <span className="login-spark">
-              <Sparkles size={20} />
+              <Building2 size={20} />
             </span>
             <div>
-              <small>STUDIO ARQUITETURA</small>
-              <h2>Bem-vinda de volta</h2>
+              <small>SEU ESPAÇO DE TRABALHO</small>
+              <h2>Entre no seu escritório</h2>
             </div>
           </div>
-          <p className="login-intro">Acesse o workspace da sua organização.</p>
+          <p className="login-intro">Continue de onde seu projeto parou.</p>
           <div
             className="login-tabs"
             role="tablist"
@@ -223,7 +223,7 @@ export default function LoginPage() {
             className="demo-access"
             onClick={() => router.push('/dashboard')}
           >
-            Explorar ambiente Enterprise <ArrowRight size={17} />
+            Explorar demonstração <ArrowRight size={17} />
           </button>
           <p className="login-legal">
             Ao continuar, você concorda com os Termos de Uso e a Política de

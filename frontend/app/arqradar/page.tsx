@@ -46,7 +46,7 @@ export default function Page(){
             <YAxis tick={{fontSize:12,fill:'var(--muted-text)'}} axisLine={false} tickLine={false} tickFormatter={v=>`${v/1000}k`}/>
             <Tooltip contentStyle={tooltipStyle} formatter={(v)=>money(Number(v))}/>
             <Bar dataKey="Receita" fill="var(--chart-1)" radius={[5,5,0,0]}/>
-            <Bar dataKey="Custo" fill="#6f8f83" radius={[5,5,0,0]}/>
+            <Bar dataKey="Custo" fill="var(--chart-2)" radius={[5,5,0,0]}/>
           </BarChart>
         </ResponsiveContainer>
       </ChartCard>

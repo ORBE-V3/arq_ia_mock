@@ -70,8 +70,8 @@ function PresentationView() {
       <div className="presentation-topline">
         <div>
           <span className="eyebrow">MODO APRESENTAÇÃO</span>
-          <h1>A jornada do projeto à decisão</h1>
-          <p>Um roteiro simples para mostrar como o ARQ.AI entra no trabalho real do escritório.</p>
+          <h1>Da primeira planta à decisão segura</h1>
+          <p>Uma apresentação guiada pelo trabalho real de quem projeta, coordena e constrói.</p>
         </div>
         <div className="presentation-actions">
           <span className="presentation-mode"><Play size={13} fill="currentColor" /> Roteiro guiado</span>
@@ -92,8 +92,9 @@ function PresentationView() {
         <section className="presentation-main panel">
           {activeStep === 0 && <>
             <div className="presentation-kicker"><Layers3 size={16} /> 01 · CONTEXTO</div>
-            <h2>Todo trabalho começa com um projeto bem definido.</h2>
-            <p className="presentation-lead">O projeto é a unidade de contexto: cliente, prazo, área, responsáveis e tudo que a equipe precisa acompanhar em um só lugar.</p>
+            <h2>Um projeto claro para todos os envolvidos.</h2>
+            <p className="presentation-lead">Cliente, prazo, área, responsáveis e documentos em um contexto compartilhado. Menos tempo procurando a versão certa; mais tempo dedicado ao projeto.</p>
+            <div className="audience-grid"><div><span>PARA ARQUITETOS</span><strong>Proteja o tempo de criação.</strong><p>Revise plantas e memoriais antes que uma divergência vire retrabalho.</p></div><div><span>PARA ESCRITÓRIOS</span><strong>Coordene com mais clareza.</strong><p>Centralize projetos, pendências e decisões sem perder o histórico.</p></div><div><span>PARA CONSTRUTORAS</span><strong>Chegue à obra com mais segurança.</strong><p>Conecte quantitativos, documentos e estimativas à origem de cada decisão.</p></div></div>
             <div className="presentation-project-card">
               <div className="presentation-project-mark">BV</div>
               <div><span className="badge green">Em demonstração</span><h3>{project.name}</h3><p>{project.client} · {project.type} · {project.area} m²</p></div>

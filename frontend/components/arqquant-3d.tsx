@@ -1,22 +1,38 @@
 'use client';
 
 import { Camera, Rotate3d } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 type Room = { name: string; area: number; x: number; y: number; w: number; h: number };
 
 const palettes = {
-  Concreto: { room: 0x7faaa0, floor: 0x183b31, line: 0x98d6bd },
-  Madeira: { room: 0xb88a5b, floor: 0x3e2b20, line: 0xe4b985 },
-  Claro: { room: 0xb8c9c0, floor: 0x1c302c, line: 0xe7f3ec },
+  light: {
+    Concreto: { room: 0xadb7b8, floor: 0xdce1df, line: 0x647881 },
+    Madeira: { room: 0xaa8060, floor: 0xd5c8b6, line: 0x73553f },
+    Claro: { room: 0xd7dbd7, floor: 0xe7ebe7, line: 0x87969a },
+  },
+  dark: {
+    Concreto: { room: 0x9facb0, floor: 0x39464d, line: 0xd2dfe2 },
+    Madeira: { room: 0x9b806c, floor: 0x3b474d, line: 0xd8c0a9 },
+    Claro: { room: 0xc6d0cf, floor: 0x414e53, line: 0xe1eae7 },
+  },
 } as const;
 
-export function SpatialPreview({ rooms, material = 'Concreto', onCapture }: { rooms: Room[]; material?: keyof typeof palettes; onCapture?: (message: string) => void }) {
+export function SpatialPreview({ rooms, material = 'Concreto', onCapture }: { rooms: Room[]; material?: keyof typeof palettes.light; onCapture?: (message: string) => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{ renderer: THREE.WebGLRenderer; group: THREE.Group; camera: THREE.PerspectiveCamera } | null>(null);
   const pointerRef = useRef({ active: false, x: 0, y: 0 });
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const syncTheme = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+    syncTheme();
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -39,9 +55,9 @@ export function SpatialPreview({ rooms, material = 'Concreto', onCapture }: { ro
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.setClearColor(0x000000, 0);
 
-    const ambient = new THREE.HemisphereLight(0xe7fff5, 0x10221d, 2.2);
+    const ambient = new THREE.HemisphereLight(theme === 'dark' ? 0xe3edf0 : 0xffffff, theme === 'dark' ? 0x36454d : 0xb9c5c8, theme === 'dark' ? 1.8 : 2.1);
     scene.add(ambient);
-    const key = new THREE.DirectionalLight(0xb7f4da, 3.2);
+    const key = new THREE.DirectionalLight(theme === 'dark' ? 0xe7f2f4 : 0xffffff, theme === 'dark' ? 2.5 : 2.8);
     key.position.set(5, 10, 3);
     key.castShadow = true;
     scene.add(key);
@@ -49,7 +65,7 @@ export function SpatialPreview({ rooms, material = 'Concreto', onCapture }: { ro
     const group = new THREE.Group();
     group.rotation.y = -0.32;
     scene.add(group);
-    const palette = palettes[material];
+    const palette = palettes[theme][material];
     const floor = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.12, 6.4), new THREE.MeshStandardMaterial({ color: palette.floor, roughness: .85, metalness: .05 }));
     floor.position.y = -0.15;
     floor.receiveShadow = true;
@@ -84,7 +100,7 @@ export function SpatialPreview({ rooms, material = 'Concreto', onCapture }: { ro
     tick();
     sceneRef.current = { renderer, group, camera };
     return () => { cancelAnimationFrame(frame); observer.disconnect(); scene.traverse((object) => { if (object instanceof THREE.Mesh || object instanceof THREE.LineSegments) { object.geometry.dispose(); if (Array.isArray(object.material)) object.material.forEach((item) => item.dispose()); else object.material.dispose(); } }); renderer.dispose(); sceneRef.current = null; };
-  }, [rooms, material, onCapture]);
+  }, [rooms, material, theme, onCapture]);
 
   function capture() {
     const renderer = sceneRef.current?.renderer;

@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/sheet';
 import { DemoProvider, useDemo } from '@/hooks/use-demo';
 import { AIChat } from '@/components/ai-chat';
-import { MotionEnhancer, PageTransition, PremiumScene } from '@/components/premium-motion';
+import { PageTransition } from '@/components/premium-motion';
 const nav = [
   ['Dashboard', '/dashboard', LayoutDashboard],
   ['Projetos', '/projects', FolderOpen],
@@ -211,8 +211,6 @@ function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <div className="content-wrap">
-          <PremiumScene />
-          <MotionEnhancer />
           <div className="content"><PageTransition>{children}</PageTransition></div>
         </div>
         <footer className="footer">
