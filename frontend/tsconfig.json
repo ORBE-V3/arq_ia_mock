@@ -42,6 +42,7 @@
     "**/*.mts"
   ],
   "exclude": [
+    "**/*.check.ts",
     "node_modules"
   ]
 }

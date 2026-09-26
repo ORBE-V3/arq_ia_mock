@@ -14,7 +14,7 @@ export const documentTypes: Record<string, string[]> = {
   'Referência técnica': ['Norma', 'Manual', 'Padrão do escritório'],
   'Outros': ['Ata', 'Correspondência', 'Fotografia', 'Outros'],
 };
-export const acceptedDocuments = '.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md,.png,.jpg,.jpeg,.webp,.ppt,.pptx,.ifc,.dwg,.bin';
+export const acceptedDocuments = '.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md,.png,.jpg,.jpeg,.webp,.ppt,.pptx,.ifc,.ifczip,.rvt,.dwg';
 export const maxFileSize = 20 * 1024 * 1024;
 export type UploadDraft = { id: string; file: File; category: string; subtype: string };
 export function makeDraft(file: File): UploadDraft {

@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/sheet';
 import { DemoProvider, useDemo } from '@/hooks/use-demo';
 import { AIChat } from '@/components/ai-chat';
+import { CheckWatcher } from '@/components/check-panel';
 import { PageTransition } from '@/components/premium-motion';
 const nav = [
   ['Dashboard', '/dashboard', LayoutDashboard],
@@ -58,6 +59,7 @@ function Shell({ children }: { children: React.ReactNode }) {
     document.documentElement.dataset.theme = next;
     document.documentElement.style.colorScheme = next;
     localStorage.setItem('arq-theme', next);
+    document.querySelector<HTMLLinkElement>('#favicon')?.setAttribute('href', next === 'dark' ? '/favicon-dark.svg?v=2' : '/favicon.svg?v=2');
   }
   const current =
     nav.find((n) => path.startsWith(n[1]))?.[0] ||
@@ -220,6 +222,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         </footer>
       </main>
       <AIChat />
+      <CheckWatcher />
       <Sheet open={notifications} onOpenChange={setNotifications}>
         <SheetContent className="drawer">
           <SheetTitle>Notificações</SheetTitle>

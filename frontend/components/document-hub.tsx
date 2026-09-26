@@ -47,7 +47,7 @@ function UploadQueue({ drafts, onChange, disabled = false }: { drafts: UploadDra
     <div className={`dh-dropzone ${dragging ? 'is-dragging' : ''}`} onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); add(event.dataTransfer.files); }}>
       <UploadCloud size={25} /><strong>Arraste seus arquivos para cá</strong><span>ou escolha no seu computador</span>
       <button className="btn" type="button" onClick={() => input.current?.click()}><Plus size={14} />Selecionar arquivos</button>
-      <small>PDF, Office, imagens, texto, IFC, DWG e BIN · até 20 MB por arquivo</small>
+      <small>PDF, Office, imagens, texto, BIM (IFC, RVT) e DWG · até 20 MB por arquivo</small>
       <input ref={input} hidden type="file" multiple accept={acceptedDocuments} onChange={(event) => { add(event.target.files); event.target.value = ''; }} />
     </div>
     {drafts.length > 0 && <p className="dh-caption">Revise a classificação de cada arquivo. O formato do arquivo é independente do tipo documental.</p>}

@@ -1,0 +1,6 @@
+/* Small layout fixes for shell components (loaded after globals/aesthetic). */
+.kanban-card-footer{flex-wrap:wrap}
+.kanban-card-footer small{flex:none;white-space:nowrap;font-size:11px;line-height:1}
+.kanban-card-footer select{flex:1 1 110px;min-width:0;max-width:100%;font-size:11px;padding:5px 6px;text-overflow:ellipsis}
+.kanban-card{min-width:0;overflow:hidden}
+[data-theme="dark"] *{scrollbar-color:var(--border-strong) transparent}
