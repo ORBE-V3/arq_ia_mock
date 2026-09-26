@@ -7,7 +7,7 @@
 /* Header: agent switcher */
 .aw-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .aw-mono{flex:none;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--aw-ink);font-size:10.5px;font-weight:700;letter-spacing:.02em}
-.aw-mono.big{width:52px;height:52px;font-size:17px;font-family:Georgia,serif;font-weight:400}
+.aw-mono.big{width:52px;height:52px;font-size:17px;font-family:var(--font-display);font-weight:400}
 .aw-head-tools{display:flex;align-items:center;gap:8px}
 .aw-head-tools select{border:1px solid var(--border);border-radius:9px;padding:7px 9px;background:var(--surface);color:var(--foreground);font:inherit;font-size:12.5px}
 .aw-scope select{font-weight:600;color:var(--aw-ink)}
@@ -22,7 +22,7 @@
 
 /* Empty state */
 .aw-hello{margin:auto 0;max-width:560px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:12px 0 24px}
-.aw-hello h3{margin:6px 0 0;font-family:Georgia,serif;font-weight:400;font-size:clamp(24px,3vw,32px);line-height:1.15;color:var(--foreground);letter-spacing:-.01em}
+.aw-hello h3{margin:6px 0 0;font-family:var(--font-display);font-weight:400;font-size:clamp(24px,3vw,32px);line-height:1.15;color:var(--foreground);letter-spacing:-.01em}
 .aw-hello p{margin:0;color:var(--muted-text);font-size:14px;line-height:1.6;max-width:52ch}
 .aw-hello kbd{padding:1px 6px;border:1px solid var(--border-strong);border-bottom-width:2px;border-radius:5px;background:var(--surface);font-size:12px}
 .aw-prompts{display:flex;flex-direction:column;gap:6px;margin-top:8px;width:100%}
@@ -37,7 +37,7 @@
 /* Agent answer as a drawing sheet */
 .aw-sheet{align-self:flex-start;width:min(100%,640px);border:1px solid var(--border-strong);border-radius:4px;background:var(--surface);box-shadow:0 1px 0 var(--border),0 10px 30px rgba(25,61,50,.06);animation:aw-in .28s ease-out}
 .aw-sheet-text{padding:18px 20px 14px}
-.aw-sheet-text p{margin:0;font-family:Georgia,serif;font-size:15.5px;line-height:1.65;color:var(--foreground);white-space:pre-wrap;max-width:68ch}
+.aw-sheet-text p{margin:0;font-family:var(--font-display);font-size:15.5px;line-height:1.65;color:var(--foreground);white-space:pre-wrap;max-width:68ch}
 .aw-cites{list-style:none;margin:14px 0 0;padding:12px 0 0;border-top:1px dashed var(--border-strong);display:flex;flex-wrap:wrap;gap:6px 14px}
 .aw-cites li{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted-text)}
 .aw-cites sup{color:var(--aw-ink);font-weight:700;font-size:10px}
@@ -103,7 +103,7 @@
 /* History + audit */
 .aw-history,.aw-audit{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:16px;margin-bottom:16px}
 .aw-section-title{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--aw-ink)}
-.aw-section-title h3{margin:0;font-family:Georgia,serif;font-weight:400;font-size:19px;color:var(--foreground)}
+.aw-section-title h3{margin:0;font-family:var(--font-display);font-weight:400;font-size:19px;color:var(--foreground)}
 .aw-section-title span{margin-left:auto;padding:2px 9px;border-radius:999px;background:var(--soft);color:var(--muted-text);font-size:12px}
 .aw-history ul{list-style:none;margin:0;padding:0}
 .aw-history li+li{border-top:1px solid var(--border)}
@@ -127,7 +127,7 @@
 /* ArqDocs project tab */
 .ad{display:flex;flex-direction:column;gap:14px}
 .ad-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.ad-top h2{margin:0;font-family:Georgia,serif;font-weight:400;font-size:26px;letter-spacing:-.01em}
+.ad-top h2{margin:0;font-family:var(--font-display);font-weight:400;font-size:26px;letter-spacing:-.01em}
 .ad-top p{margin:4px 0 0;color:var(--muted-text);font-size:13.5px}
 .ad-actions{display:flex;gap:8px}
 .ad-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -217,7 +217,7 @@
 .aw-error{margin:6px 0 0;color:#b4412f;font-size:12px}
 .aw-create-preview{position:sticky;top:0;align-self:start;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--soft);border:1px solid var(--border)}
 .aw-create-preview>span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--aw-ink)}
-.aw-create-preview pre{margin:0;white-space:pre-wrap;font-family:Georgia,serif;font-size:13px;line-height:1.55;color:var(--foreground);max-height:420px;overflow-y:auto}
+.aw-create-preview pre{margin:0;white-space:pre-wrap;font-family:var(--font-display);font-size:13px;line-height:1.55;color:var(--foreground);max-height:420px;overflow-y:auto}
 .aw-create-preview small{display:inline-flex;gap:5px;align-items:center;color:var(--muted-text);font-size:11.5px}
 .aw-create-footer{grid-column:1/-1}
 @media (max-width:760px){.aw-create-grid{grid-template-columns:1fr}.aw-create-row{grid-template-columns:1fr}.aw-create-preview{position:static}}

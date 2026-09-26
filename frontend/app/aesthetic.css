@@ -62,14 +62,14 @@
   --hero-b:#293238;
   --warm:#c4a884;
 }
-body {font-family:"Avenir Next","Segoe UI Variable",Inter,"Segoe UI",sans-serif;background:var(--background);color:var(--foreground);}
+body {font-family:var(--font-ui);background:var(--background);color:var(--foreground);}
 body:before,.main:before,.content:before,.insight-banner:after,.plan-card:after,.module-card:before,.metric:after {display:none;}
 .content-wrap,.main {background:var(--background);color:var(--foreground);}
 h1,h2,h3 {letter-spacing:-.035em;}
-h1,.page-heading h1,.presentation-topline h1 {font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.045em;}
+h1,.page-heading h1,.presentation-topline h1 {font-family:var(--font-display);font-weight:400;letter-spacing:-.045em;}
 .page-heading h1 {font-size:clamp(2rem,3vw,2.65rem);}
 .eyebrow,.nav-label {letter-spacing:.19em;font-weight:600;}
-.brand {font-family:Georgia,serif;font-weight:500;letter-spacing:-.07em;color:var(--foreground);}
+.brand {font-family:var(--font-display);font-weight:500;letter-spacing:-.07em;color:var(--foreground);}
 .brand-mark {border-color:var(--primary);border-radius:4px;color:var(--primary);}
 .brand-ai {font-weight:400;}
 .workspace,.plan-card,.panel,.metric,.module-card,.agent-card,.presentation-step,.login-card {box-shadow:none;border-color:var(--border);}
@@ -130,12 +130,12 @@ h1,.page-heading h1,.presentation-topline h1 {font-family:Georgia,"Times New Rom
 .study-wall {position:absolute;right:9%;top:38%;width:clamp(90px,12vw,190px);height:54%;background:linear-gradient(90deg,#ece6d9,#d4cfbe);transform:skewY(-11deg);box-shadow:-22px 16px 38px #514d4222;opacity:.62;}
 .study-floor {position:absolute;right:-10%;bottom:-20%;width:85%;height:42%;border-radius:50%;background:radial-gradient(ellipse,#a59d8863,transparent 70%);transform:rotate(-12deg);}
 .study-caption {position:absolute;right:clamp(22px,5vw,80px);bottom:34px;color:#6f7162;font-size:10px;letter-spacing:.23em;}
-.login-brand {color:#30342c;font-family:Georgia,serif;font-weight:400;letter-spacing:-.08em;}
+.login-brand {color:#30342c;font-family:var(--font-display);font-weight:400;letter-spacing:-.08em;}
 .login-brand .brand-mark {background:transparent;border-color:#858b71;color:#48523b;}
 .login-brand>span:last-child span {color:#79654f;}
 .story-content {max-width:690px;margin:auto 0 8%;}
 .enterprise-kicker {border:0;border-bottom:1px solid #989185;background:transparent;border-radius:0;padding:0 0 9px;color:#645846;font-size:11px;letter-spacing:.12em;text-transform:uppercase;}
-.story-content h1 {margin-top:31px;color:#302f2a;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(3.3rem,5.4vw,6rem);line-height:1.04;letter-spacing:-.065em;}
+.story-content h1 {margin-top:31px;color:#302f2a;font-family:var(--font-display);font-weight:400;font-size:clamp(3.3rem,5.4vw,6rem);line-height:1.04;letter-spacing:-.065em;}
 .story-content h1 em {color:#79654f;font-weight:400;}
 .story-content>p {max-width:530px;color:#5e6056;font-size:1rem;line-height:1.8;}
 .story-proof {max-width:620px;gap:0;margin-top:42px;background:transparent;border:0;border-top:1px solid #a9aa9c;border-radius:0;}
@@ -145,7 +145,7 @@ h1,.page-heading h1,.presentation-topline h1 {font-family:Georgia,"Times New Rom
 .story-footer {color:#686c60;}
 .login-access {background:#f8f7f3;}
 .login-card {background:transparent;border:0;border-radius:0;padding:24px;box-shadow:none;}
-.login-card-head h2 {font-family:Georgia,serif;font-size:2.2rem;font-weight:400;}
+.login-card-head h2 {font-family:var(--font-display);font-size:2.2rem;font-weight:400;}
 .login-card-head small {color:var(--accent);}
 .login-spark {border-radius:4px;background:var(--accent-soft);color:var(--primary);}
 .login-tabs,.login-tabs button,.login-field>div,.sso-context,.login-submit,.demo-access {border-radius:4px;}
@@ -159,14 +159,14 @@ h1,.page-heading h1,.presentation-topline h1 {font-family:Georgia,"Times New Rom
 .presentation-step:hover {transform:none;}
 .presentation-step.active {background:var(--accent-soft);}
 .presentation-step-number,.presentation-project-mark,.presentation-note,.presentation-project-card,.presentation-upload-card,.presentation-result-card,.quant-principles>div {border-radius:5px;}
-.presentation-main h2 {font-family:Georgia,serif;font-weight:400;letter-spacing:-.045em;}
+.presentation-main h2 {font-family:var(--font-display);font-weight:400;letter-spacing:-.045em;}
 .presentation-script {background:#655848;color:#f8f5ef;}
 .presentation-script .eyebrow {color:#e0d1bc;}
 .presentation-script p {color:#e8ded0;}
 .audience-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:26px;}
 .audience-grid>div {padding:17px;border:1px solid var(--border);background:var(--soft);}
 .audience-grid span {color:var(--accent);font-size:9px;font-weight:700;letter-spacing:.14em;}
-.audience-grid strong {display:block;margin-top:12px;font-family:Georgia,serif;font-size:17px;font-weight:400;line-height:1.25;}
+.audience-grid strong {display:block;margin-top:12px;font-family:var(--font-display);font-size:17px;font-weight:400;line-height:1.25;}
 .audience-grid p {margin-top:8px;color:var(--muted-text);font-size:11px;line-height:1.55;}
 @media(max-width:1100px){.presentation-flow{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.login-page{grid-template-columns:1fr}.login-story{min-height:600px}.login-access{min-height:680px}}

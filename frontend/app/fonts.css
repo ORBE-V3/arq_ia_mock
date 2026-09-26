@@ -1,0 +1,7 @@
+/* Typography: calm, architectural. Loaded last so it wins over legacy declarations. */
+html body{font-family:var(--font-ui);font-feature-settings:"tnum" 0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* Large display type in a light weight with a touch of air reads like drawing-sheet lettering. */
+h1,h2,.hm-head h1,.page-header h1{font-family:var(--font-display);font-weight:350;letter-spacing:-.005em}
+h1{font-weight:300}
+table,[class*="kpi"] b,[class*="num"],.bw-num,.qs-q-grid b,.qs-area b{font-variant-numeric:tabular-nums}
+input,select,textarea,button{font-family:inherit}

@@ -1,0 +1,27 @@
+/* Help assistant drawer */
+.hp{display:flex;flex-direction:column;gap:10px}
+.hp :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hp-title{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:400;font-size:22px;color:var(--foreground)}
+.hp-sub{margin:0;color:var(--muted-text);font-size:13px}
+.hp-log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:6px 0}
+.hp-log section{display:flex;flex-direction:column;gap:4px}
+.hp-log h3{margin:6px 0 2px;font-size:12px;font-weight:600;color:var(--muted-text)}
+.hp-log section button{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--foreground);font:inherit;font-size:13.5px;text-align:left;cursor:pointer}
+.hp-log section button:hover{border-color:var(--border-strong);background:var(--soft)}
+.hp-log section button svg{flex:none;color:var(--muted-text)}
+.hp-user{align-self:flex-end;max-width:85%;margin:0;padding:9px 13px;border-radius:14px 14px 4px 14px;background:var(--primary);color:#fff;font-size:13.5px}
+[data-theme="dark"] .hp-user{color:#06110e}
+.hp-answer{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface);font-size:13.5px;color:var(--foreground)}
+.hp-answer header{display:flex;align-items:center;gap:7px;font-weight:600;margin-bottom:6px}
+.hp-answer header svg{color:var(--rv-1)}
+.hp-answer ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px;line-height:1.5}
+.hp-answer p{margin:0;line-height:1.55}
+.hp-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.hp-links .btn{text-decoration:none;font-size:12.5px}
+.hp-answer footer{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;padding-top:8px;border-top:1px dashed var(--border-strong)}
+.hp-answer footer small{width:100%;color:var(--muted-text);font-size:11.5px}
+.hp-answer footer button{padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:none;color:var(--foreground);font:inherit;font-size:12px;cursor:pointer}
+.hp-answer footer button:hover{background:var(--soft)}
+.hp-answer.miss header{color:var(--muted-text)}
+.hp-note{display:block;margin-top:6px;color:var(--muted-text);font-size:11.5px}
+.hp-busy{display:flex;align-items:center;gap:7px;margin:0;color:var(--muted-text);font-size:13px}
